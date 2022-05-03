@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 #define sqlite connection url
-SQLALCHEMY_DATABASE_URL = "sqlite:///./events_api.db"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/db"
 
 # create new engine instance 
 engine = create_engine(
