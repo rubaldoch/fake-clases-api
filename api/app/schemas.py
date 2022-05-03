@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import (Optional, List)
 from pydantic import BaseModel
 
-from app.models import Aula
+from api.app.models import Aula
 
 class EventBase(BaseModel):
     name: str

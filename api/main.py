@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 
-from app import models, schemas, crud
-from app.db import engine, SessionLocal
+from api.app import models, schemas, crud
+from api.app.db import engine, SessionLocal
 
 models.Base.metadata.create_all(bind=engine)
 

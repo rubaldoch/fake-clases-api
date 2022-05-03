@@ -8,8 +8,8 @@ Session manages persistence operations for ORM-mapped objects.
 Let's just refer to it as a database session for simplicity
 """
 
-from app.models import Aula, Event
-from app import schemas
+from api.app.models import Aula, Event
+from api.app import schemas
 
 """
     Aula CRUD
