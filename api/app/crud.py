@@ -1,4 +1,7 @@
 from sqlalchemy.orm import Session
+from datetime import datetime, timedelta
+from pytz import timezone
+from sqlalchemy import and_
 
 """
 Session manages persistence operations for ORM-mapped objects.
@@ -34,6 +37,10 @@ def delete_aula(db:Session, codigo:str):
     db.delete(db_aula)
     db.commit()
 
+def delete_all_aulas(db:Session):
+    db.query(Aula).delete()
+    db.commit()
+
 """
     Event CRUD
 """
@@ -41,13 +48,28 @@ def delete_aula(db:Session, codigo:str):
 def get_event(db:Session, id:int):
     return db.query(Event).filter(Event.id==id).first()
 
-def get_events_by_aula(db:Session, aula_codigo:str, skip: int = 0, limit: int = 5):
-    return db.query(Event).join(Aula).filter(Aula.codigo == aula_codigo).offset(skip).limit(limit).all()
+def get_next_events_by_aula(db:Session, aula_codigo:str, skip: int = 0, limit: int = 5):
+    tz = timezone('America/Lima')
+    now = datetime.now(tz=tz)
+    end_date = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(1)
+
+    return db.query(Event).filter(and_(
+        Event.hora_inicio > now), 
+        Event.hora_fin < end_date
+    ).join(Aula).filter(and_(Aula.codigo == aula_codigo, )).offset(skip).limit(limit).all()
+
+def get_current_event_by_aula(db:Session, aula_codigo:str):
+    tz = timezone('America/Lima')
+    now = datetime.now(tz=tz)
+    return db.query(Event).filter(and_(
+        Event.hora_inicio <= now), 
+        Event.hora_fin > now
+    ).join(Aula).filter(and_(Aula.codigo == aula_codigo, )).first()
+
+
 
 def get_events(db:Session, skip: int = 0, limit: int = 5):
     return db.query(Event).offset(skip).limit(limit).all()
-
-
 
 def create_aula_event(db:Session, event:schemas.EventCreate, aula_codigo: str):
     # check if aula exists

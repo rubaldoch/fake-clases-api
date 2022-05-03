@@ -3,11 +3,11 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 #define sqlite connection url
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:postgres@localhost/db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./events_api.db"
 
 # create new engine instance 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args = {"check_same_thread": False}
+    SQLALCHEMY_DATABASE_URL, connect_args = {"check_same_thread": False}, echo=True
 )
 
 # create sessionmaker 
